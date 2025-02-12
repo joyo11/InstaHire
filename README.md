@@ -51,18 +51,18 @@ OPENAI_API_KEY=your_api_key_here
 
 3. Install Dependencies
 ```bash
-1. npm install openai@4.24.1
+npm install openai@4.24.1
 
-2. rm -rf .next
+rm -rf .next
 
-3. npm install
+npm install
 
-4. npx prisma generate
+npx prisma generate
 
-5. npx prisma migrate dev --name init
+npx prisma migrate dev --name init
 
-6. npm run dev
-![image](https://github.com/user-attachments/assets/443abb1c-cc7b-4030-ab31-1a6b278bbb48)
+npm run dev
+
 
 ```
 
