@@ -45,7 +45,7 @@ Create a `.env` file in the root directory:
 Add the following lines:
 
 ```bash
-DATABASE_URL="file:./prisma/db.sqlite"
+DATABASE_URL="file:./dev.db"
 OPENAI_API_KEY=your_api_key_here
 ```
 
