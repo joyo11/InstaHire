@@ -1,0 +1,21 @@
+     version: 1
+     frontend:
+       phases:
+         preBuild:
+           commands:
+             - npm ci --cache .npm --prefer-offline
+             - npm install openai@4.7.0
+             - rm -rf .next
+         build:
+           commands:
+             - npx prisma generate
+             - npx prisma migrate dev --name init
+             - npm run build
+       artifacts:
+         baseDirectory: .next
+         files:
+           - '**/*'
+       cache:
+         paths:
+           - .next/cache/**/*
+           - .npm/**/*
