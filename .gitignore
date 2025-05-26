@@ -1,8 +1,4 @@
-.next
-<<<<<<< HEAD
-=======
-node_modules/
 .env
+node_modules/
 .DS_Store
 .vscode/
->>>>>>> eb5be2f (Add all project files including amplify.yml)

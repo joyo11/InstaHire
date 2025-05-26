@@ -66,6 +66,7 @@ const BotMessage = React.memo(({
   alt="Logo"
   width={24}
   height={24}
+  style={{ marginTop: '9px' }}
 />
       <div className={`inline-block p-3 rounded-[14px] max-w-[85%] transition-colors duration-300 break-words ${
         isDarkTheme 
