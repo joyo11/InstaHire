@@ -1,7 +1,7 @@
 // Mohammad Shafay Joyo @ 2025
-import OpenAI from "openai";
+import OpenAI, { ChatCompletionRequestMessage } from "openai";
 import { Message } from "@/types/chat";
-import type { ChatCompletionRequestMessage } from "openai";
+
 
 
 const openai = new OpenAI({
@@ -236,11 +236,11 @@ export async function generateResponse(
       return "I apologize, but I'm not properly configured at the moment.";
     }
 
-    // Convert messages to OpenAI chat format
-    const conversationHistory: ChatCompletionMessageParam[] = messages.map((msg) => ({
-      role: msg.role === "user" ? "user" : "assistant",
-      content: msg.content,
-    }));
+    // In generateResponse:
+const conversationHistory: ChatCompletionRequestMessage[] = messages.map((msg) => ({
+  role: msg.role === "user" ? "user" : "assistant",
+  content: msg.content,
+}));
 
     // Generate response using OpenAI API
     const response = await openai.chat.completions.create({
