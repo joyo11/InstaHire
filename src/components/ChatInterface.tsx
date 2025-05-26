@@ -5,6 +5,9 @@
 import React, { useState, useRef, useEffect } from "react"
 import type { Message } from "@/types/chat"
 import { ArrowUp, MoreVertical, Trash2, Settings, X } from "lucide-react"
+import Image from 'next/image';
+
+
 
 interface Conversation {
   id: string;
@@ -58,11 +61,12 @@ const BotMessage = React.memo(({
 
   return (
     <div className="flex items-start gap-3">
-      <img 
-        src="/Instahire1.png"
-        alt="InstaHire"
-        className="w-6 h-6 rounded-full mt-3"
-      />
+<Image
+  src="/InstaHire1.png"
+  alt="Logo"
+  width={24}
+  height={24}
+/>
       <div className={`inline-block p-3 rounded-[14px] max-w-[85%] transition-colors duration-300 break-words ${
         isDarkTheme 
           ? 'bg-dark-light text-white'
