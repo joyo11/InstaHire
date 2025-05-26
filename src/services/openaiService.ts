@@ -1,6 +1,7 @@
 // Mohammad Shafay Joyo @ 2025
 import OpenAI from "openai";
 import { Message } from "@/types/chat";
+import type { ChatCompletionRequestMessage } from "openai";
 
 
 const openai = new OpenAI({
