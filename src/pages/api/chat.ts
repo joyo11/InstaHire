@@ -6,6 +6,16 @@ import { generateResponse } from "@/services/openaiService";
 
 const prisma = new PrismaClient();
 
+// Helper to convert Prisma message object to your Message type
+function toMessage(msg: any) {
+  return {
+    id: msg.id,
+    role: msg.role,
+    content: msg.content,
+    // Exclude conversationId, createdAt, or other Prisma fields
+  };
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -43,7 +53,7 @@ export default async function handler(
         });
 
         return res.status(200).json({
-          messages: [assistantMessage],
+          messages: [toMessage(assistantMessage)],
           conversationId: conversation.id,
         });
       }
@@ -83,7 +93,7 @@ export default async function handler(
       });
 
       return res.status(200).json({
-        messages: [userMessage, assistantMessage],
+        messages: [toMessage(userMessage), toMessage(assistantMessage)],
         conversationId: conversation.id,
         status: currentQuestion?.id === "end" ? "completed" : "in_progress",
       });
@@ -133,4 +143,4 @@ function getCurrentQuestion(conversation: any) {
   const questionKeys = Object.keys(interviewQuestions);
   const currentQuestionIndex = Math.floor(messageCount / 2);
   return interviewQuestions[questionKeys[currentQuestionIndex]];
-} 
+}
