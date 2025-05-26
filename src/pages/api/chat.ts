@@ -13,6 +13,7 @@ function toMessage(msg: any): Message {
     id: String(msg.id),
     role: msg.role === "user" ? "user" : "assistant", // ensure role is correct literal
     content: String(msg.content),
+    createdAt: msg.createdAt,
   };
 }
 
