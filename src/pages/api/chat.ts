@@ -3,16 +3,16 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { interviewQuestions } from "@/services/interviewService";
 import { generateResponse } from "@/services/openaiService";
+import type { Message } from "@/types/chat"; // adjust import path as needed
 
 const prisma = new PrismaClient();
 
 // Helper to convert Prisma message object to your Message type
-function toMessage(msg: any) {
+function toMessage(msg: any): Message {
   return {
-    id: msg.id,
-    role: msg.role,
-    content: msg.content,
-    // Exclude conversationId, createdAt, or other Prisma fields
+    id: String(msg.id),
+    role: msg.role === "user" ? "user" : "assistant", // ensure role is correct literal
+    content: String(msg.content),
   };
 }
 
@@ -33,7 +33,7 @@ export default async function handler(
         : await prisma.conversation.create({
             data: {
               status: "in_progress",
-              metadata: JSON.stringify({ sessionNumber: Date.now() }), // Only set session number
+              metadata: JSON.stringify({ sessionNumber: Date.now() }),
             },
             include: { messages: true },
           });
@@ -67,14 +67,18 @@ export default async function handler(
         },
       });
 
+      // Prepare messages for response
+      const formattedMessages: Message[] = [
+        ...conversation.messages.map(toMessage),
+        toMessage(userMessage),
+      ];
+
       // Get current question and generate response
       const currentQuestion = getCurrentQuestion(conversation);
-const formattedMessages = [...conversation.messages.map(toMessage), toMessage(userMessage)];
-const botResponse = await generateResponse(
-  formattedMessages,
-  currentQuestion?.id || ""
-);
-
+      const botResponse = await generateResponse(
+        formattedMessages,
+        currentQuestion?.id || ""
+      );
 
       // Save bot response
       const assistantMessage = await prisma.message.create({
@@ -90,7 +94,6 @@ const botResponse = await generateResponse(
         where: { id: conversation.id },
         data: {
           updatedAt: new Date(),
-          // Don't modify metadata here
         },
       });
 
@@ -114,8 +117,7 @@ function processUserResponse(
   answer: string
 ): Record<string, any> {
   const newMetadata = { ...metadata };
-  
-  // Only update specific fields based on question type
+
   switch (questionId) {
     case "position":
       newMetadata.position = answer;
