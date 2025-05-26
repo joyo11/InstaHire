@@ -1,7 +1,7 @@
 // Mohammad Shafay Joyo @ 2025
 import OpenAI from 'openai';
 import { Message } from "@/types/chat";
-import { ChatCompletionMessageParam } from 'openai/resources/chat';
+import OpenAI from "openai";
 
 // Initialize OpenAI client with API key
 const openai = new OpenAI({
