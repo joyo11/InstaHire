@@ -1,12 +1,16 @@
 // Mohammad Shafay Joyo @ 2025
-import OpenAI, { ChatCompletionRequestMessage } from "openai";
+import OpenAI from "openai";
 import { Message } from "@/types/chat";
-
-
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
 });
+
+// Define minimal interface for chat messages
+interface OpenAIChatMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
 
 
 // System prompt for the interview chatbot
@@ -225,6 +229,7 @@ Remember:
 - Keep the conversation flowing naturally`;
 
 // Main function to generate AI responses based on conversation history
+// Main function to generate AI responses based on conversation history
 export async function generateResponse(
   messages: Message[],
   currentQuestion: string
@@ -236,31 +241,29 @@ export async function generateResponse(
       return "I apologize, but I'm not properly configured at the moment.";
     }
 
-    // In generateResponse:
-const conversationHistory: ChatCompletionRequestMessage[] = messages.map((msg) => ({
-  role: msg.role === "user" ? "user" : "assistant",
-  content: msg.content,
-}));
+    // Map your messages to the format expected by OpenAI
+    const conversationHistory: OpenAIChatMessage[] = messages.map((msg) => ({
+      role: msg.role === "user" ? "user" : "assistant",
+      content: msg.content,
+    }));
 
-    // Generate response using OpenAI API
+    // Call OpenAI chat completion
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...conversationHistory,
       ],
-      temperature: 0.7, // Controls response randomness
-      max_tokens: 500, // Limits response length
+      temperature: 0.7,
+      max_tokens: 500,
     });
 
-    // Handle empty response case
     if (!response.choices[0]?.message?.content) {
       throw new Error("No response from OpenAI");
     }
 
     return response.choices[0].message.content;
   } catch (error: any) {
-    // Handle API errors gracefully
     console.error("OpenAI API Error:", error.response?.data || error.message);
     if (error.response?.status === 401) {
       return "Authentication error. Please check the API key configuration.";
@@ -286,4 +289,4 @@ export async function sendMessage(messages: Message[], isInitial = false) {
     console.error('Error in sendMessage:', error);
     throw error;
   }
-} 
+}
