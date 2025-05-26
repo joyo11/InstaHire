@@ -69,10 +69,12 @@ export default async function handler(
 
       // Get current question and generate response
       const currentQuestion = getCurrentQuestion(conversation);
-      const botResponse = await generateResponse(
-        [...conversation.messages, userMessage],
-        currentQuestion?.id || ""
-      );
+const formattedMessages = [...conversation.messages.map(toMessage), toMessage(userMessage)];
+const botResponse = await generateResponse(
+  formattedMessages,
+  currentQuestion?.id || ""
+);
+
 
       // Save bot response
       const assistantMessage = await prisma.message.create({
