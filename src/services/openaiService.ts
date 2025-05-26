@@ -1,11 +1,11 @@
 // Mohammad Shafay Joyo @ 2025
-import OpenAI from 'openai';
+import * as OpenAI from "openai";
 import { Message } from "@/types/chat";
 
 
 // Initialize OpenAI client with API key
+const openai = new OpenAI.default(process.env.OPENAI_API_KEY || "");
 
-const openai = new OpenAI(process.env.OPENAI_API_KEY || "");
 
 // System prompt for the interview chatbot
 const SYSTEM_PROMPT = `You are conducting a Full Stack Software Engineer Interview at FinTech Solutions. Be friendly yet professional:
