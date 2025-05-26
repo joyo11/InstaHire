@@ -1,10 +1,11 @@
 // Mohammad Shafay Joyo @ 2025
-import * as OpenAI from "openai";
+import OpenAI from "openai";
 import { Message } from "@/types/chat";
 
 
-// Initialize OpenAI client with API key
-const openai = new OpenAI.default(process.env.OPENAI_API_KEY || "");
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || "",
+});
 
 
 // System prompt for the interview chatbot
